@@ -5,6 +5,7 @@ import net.ano.mixin.BossHealthAccessor;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +30,7 @@ public class EventListener {
             String towerString = String.format("{\"owner\": \"%s\", \"territory\": \"%s\", \"health\": %d, \"defense\": %f, \"damage\": \"%s\", \"attackSpeed\": %f}",
                     tower.group(1), tower.group(2), Integer.parseInt(tower.group(3)), Float.parseFloat(tower.group(4)), tower.group(5), Float.parseFloat(tower.group(6)));
             String jsonString = String.format("{\"class_\": \"%s\", \"name\": \"%s\",  \"uuid\": \"%s\", \"tower\": %s}",
-                    Anode.state.className, anode.mc.player.getName().getString(), anode.mc.player.getUUID().toString(), towerString
+                    "Mage", anode.mc.player.getName().getString(), anode.mc.player.getUUID().toString(), towerString
             );
             String response;
             try {
@@ -39,6 +40,7 @@ public class EventListener {
             }
             anode.logger.info(String.format("POST WAR, FROM SERVER: {%s}", response));
             anode.mc.player.sendSystemMessage(Component.literal("[Anode] Tracked attempt"));
+            anode.mc.getHotbarManager();
         }
         return CompoundEventResult.pass();
     }
