@@ -27,7 +27,7 @@ public class EventListener {
             String towerString = String.format("{\"owner\": \"%s\", \"territory\": \"%s\", \"health\": %d, \"defense\": %f, \"damage\": \"%s\", \"attackSpeed\": %f}",
                     tower.group(1), tower.group(2), Integer.parseInt(tower.group(3)), Float.parseFloat(tower.group(4)), tower.group(5), Float.parseFloat(tower.group(6)));
             String jsonString = String.format("{\"class_\": \"%s\", \"name\": \"%s\",  \"uuid\": \"%s\", \"tower\": %s}",
-                    Anode.state.className, anode.mc.player.getName().getString(), anode.mc.player.getUuid().toString(), towerString
+                    Anode.state.className, anode.mc.player.getName().getString(), anode.mc.player.getUUID().toString(), towerString
             );
         }
         return CompoundEventResult.pass();
