@@ -15,10 +15,4 @@ public class anodeForge {
         EventBuses.registerModEventBus(anode.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         anode.init();
     }
-
-    @SubscribeEvent
-    public void clientChatRecievedEvent(ClientChatReceivedEvent event){
-        if(event.isSystem()) return;
-        EventListener.onChat(event.getMessage());
-    }
 }
