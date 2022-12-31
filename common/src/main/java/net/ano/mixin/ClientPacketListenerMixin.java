@@ -18,10 +18,11 @@ public class ClientPacketListenerMixin {
             @At(
                     value = "INVOKE",
                     target =
-                            "Lnet/minecraft/client/multiplayer/chat/ChatListener;handlePlayerChatMessage(Lnet/minecraft/network/chat/PlayerChatMessage;Lcom/mojang/authlib/GameProfile;Lnet/minecraft/network/chat/ChatType$Bound;)V"),
-            cancellable = true)
+                            "Lnet/minecraft/client/multiplayer/chat/ChatListener;handlePlayerChatMessage(Lnet/minecraft/network/chat/PlayerChatMessage;Lcom/mojang/authlib/GameProfile;Lnet/minecraft/network/chat/ChatType$Bound;)V")
+    )
     private void handlePlayerChat(ClientboundPlayerChatPacket packet, CallbackInfo ci) {
         if (!Minecraft.getInstance().isSameThread()) return;
+        System.out.println("wokring");
         EventListener.processChat(packet.unsignedContent());
     }
 
