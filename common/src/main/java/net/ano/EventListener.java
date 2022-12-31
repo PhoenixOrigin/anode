@@ -2,11 +2,12 @@ package net.ano;
 
 import dev.architectury.event.CompoundEventResult;
 import net.ano.mixin.BossHealthAccessor;
-import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -24,11 +25,20 @@ public class EventListener {
             LerpingBossEvent event = entry.getValue();
             String name = ComponentUtils.getCoded(event.getName());
             Matcher tower = towerPattern.matcher(name);
+            if (!tower.matches()) return CompoundEventResult.pass();
             String towerString = String.format("{\"owner\": \"%s\", \"territory\": \"%s\", \"health\": %d, \"defense\": %f, \"damage\": \"%s\", \"attackSpeed\": %f}",
                     tower.group(1), tower.group(2), Integer.parseInt(tower.group(3)), Float.parseFloat(tower.group(4)), tower.group(5), Float.parseFloat(tower.group(6)));
             String jsonString = String.format("{\"class_\": \"%s\", \"name\": \"%s\",  \"uuid\": \"%s\", \"tower\": %s}",
                     Anode.state.className, anode.mc.player.getName().getString(), anode.mc.player.getUUID().toString(), towerString
             );
+            String response;
+            try {
+                response = WebUtils.postAPI(new URL("http://38.242.159.42:6969/postwar"), jsonString);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            anode.logger.info(String.format("POST WAR, FROM SERVER: {%s}", response));
+            anode.mc.player.sendSystemMessage(Component.literal("[Anode] Tracked attempt"));
         }
         return CompoundEventResult.pass();
     }
