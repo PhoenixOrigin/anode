@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ChatListenerMixin {
     @Inject(at = @At("HEAD"), method = "handlePlayerChatMessage(Lnet/minecraft/network/chat/PlayerChatMessage;Lcom/mojang/authlib/GameProfile;Lnet/minecraft/network/chat/ChatType$Bound;)V")
     private void handlePlayerChat(PlayerChatMessage playerChatMessage, GameProfile gameProfile, ChatType.Bound bound, CallbackInfo ci) {
-        if (!Minecraft.getInstance().isSameThread()) return;
         System.out.println("wokring");
         EventListener.processChat(playerChatMessage.unsignedContent());
     }
