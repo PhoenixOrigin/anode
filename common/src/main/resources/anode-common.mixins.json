@@ -3,7 +3,6 @@
   "package": "net.ano.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "ChatListenerMixin",
     "MixinTitleScreen",
     "ClientPacketListenerMixin"
   ],
