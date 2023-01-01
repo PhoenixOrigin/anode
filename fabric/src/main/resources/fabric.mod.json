@@ -3,18 +3,25 @@
   "id": "anode",
   "version": "${version}",
   "name": "Ano Mod",
-  "description": "This is a war tracker mod for ANO",
+  "description": "The official ANO multipurpose mod.",
   "authors": [
     "PhoenixOrigin"
   ],
-  "license": "MIT",
-  "icon": "assets/anode/icon.png",
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "Insert License Here",
+  "icon": "assets/examplemod/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
       "net.ano.fabric.anodeFabric"
     ]
   },
+  "mixins": [
+    "anode-common.mixins.json"
+  ],
   "depends": {
     "minecraft": ">=1.19.3"
   }
