@@ -21,7 +21,6 @@ public abstract class ClientPacketListenerMixin {
                             "Lnet/minecraft/client/multiplayer/chat/ChatListener;handleSystemMessage(Lnet/minecraft/network/chat/Component;Z)V")
     )
     private void handlePlayerChat(ClientboundSystemChatPacket clientboundSystemChatPacket, CallbackInfo ci) {
-        System.out.println("wokring");
         EventListener.processChat(clientboundSystemChatPacket.content());
     }
 
