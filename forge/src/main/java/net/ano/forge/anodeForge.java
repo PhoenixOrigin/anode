@@ -2,16 +2,14 @@ package net.ano.forge;
 
 import net.ano.anode;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL13;
 
-import javax.swing.text.html.parser.Entity;
+
+
 
 @Mod(anode.MOD_ID)
 public class anodeForge {
@@ -20,8 +18,19 @@ public class anodeForge {
     }
 
     @SubscribeEvent
-    public static void preRenderPlayer(RenderPlayerEvent.Pre event){
-        GL12.glRotated(180, event.getEntity().getBlockX(), event.getEntity().getBlockY(), event.getEntity().getBlockZ());
+    //@SideOnly(Side.CLIENT)
+    public void rotateEntities(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
+            GL13.glPushMatrix();
+            GL13.glTranslatef(0.0F, (float) (event.getEntity().getY()*2f+event.getEntity().getBoundingBox().getYsize()), 0.0F);
+            GL13.glRotatef(180f, 0, 0, 0);
+            GL13.glRotatef(180f, 0, 1, 0);
+
+    }
+
+    @SubscribeEvent
+    //@SideOnly(Side.CLIENT)
+    public void rotateEntities(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
+            GL13.glPopMatrix();
     }
 
 }
