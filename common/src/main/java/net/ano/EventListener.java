@@ -22,7 +22,6 @@ public class EventListener {
     private static final Pattern pattern = Pattern.compile("§3\\[WAR§3] The battle has begun!");
     private static final Pattern towerPattern = Pattern.compile("§3\\[([a-zA-Z0-9]{3,4})] §b([a-zA-Z0-9 ]{3,})§7 - §4❤ ([0-9]*)§7 \\(§6(\\d+\\.?\\d*%)§7\\) - §c☠ ([0-9]*-[0-9]*)§7 \\(§b(\\d+\\.?\\d*)x§7\\)");
     public static void processChat(Component component) {
-
         Matcher matcher = pattern.matcher(ComponentUtils.getCoded(component));
         if (!matcher.matches()) return;
         BossHealthAccessor overlay = (BossHealthAccessor) Minecraft.getInstance().gui.getBossOverlay();
@@ -53,9 +52,10 @@ public class EventListener {
         AbstractContainerMenu menu = Minecraft.getInstance().player.containerMenu;
         List<ItemStack> items = menu.getItems();
         for (int i = 0; i < items.size(); i++){
-            //Add a check here if terr or not
-            //query
-            //set
+            ItemStack stack = items.get(i);
+            String name = ChatFormatting.stripFormatting(ComponentUtils.getCoded(stack.getDisplayName());
+            if(name.equals("Back")) continue;
+
         }
     }
 
