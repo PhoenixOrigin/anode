@@ -3,6 +3,8 @@ package net.ano.mixin;
 import net.ano.EventListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
+import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
 public abstract class ClientPacketListenerMixin {
+
     @Inject(
             method = "handleSystemChat",
             at =
@@ -23,5 +26,17 @@ public abstract class ClientPacketListenerMixin {
     private void handlePlayerChat(ClientboundSystemChatPacket clientboundSystemChatPacket, CallbackInfo ci) {
         EventListener.processChat(clientboundSystemChatPacket.content());
     }
+
+    @Inject(
+            method = "handleOpenScreen",
+            at = @At(
+                    value = "HEAD"
+            )
+    )
+    private void handleOpenScreen(ClientboundOpenScreenPacket packet, CallbackInfo ci){
+        EventListener.processContainerOpened(packet.getTitle());
+    }
+    
+    
 
 }

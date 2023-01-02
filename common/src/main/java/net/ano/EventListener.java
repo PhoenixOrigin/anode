@@ -1,12 +1,16 @@
 package net.ano;
 
 import net.ano.mixin.BossHealthAccessor;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -18,6 +22,7 @@ public class EventListener {
     private static final Pattern pattern = Pattern.compile("§3\\[WAR§3] The battle has begun!");
     private static final Pattern towerPattern = Pattern.compile("§3\\[([a-zA-Z0-9]{3,4})] §b([a-zA-Z0-9 ]{3,})§7 - §4❤ ([0-9]*)§7 \\(§6(\\d+\\.?\\d*%)§7\\) - §c☠ ([0-9]*-[0-9]*)§7 \\(§b(\\d+\\.?\\d*)x§7\\)");
     public static void processChat(Component component) {
+
         Matcher matcher = pattern.matcher(ComponentUtils.getCoded(component));
         if (!matcher.matches()) return;
         BossHealthAccessor overlay = (BossHealthAccessor) Minecraft.getInstance().gui.getBossOverlay();
@@ -40,6 +45,17 @@ public class EventListener {
             anode.logger.info(String.format("POST WAR, FROM SERVER: {%s}", response));
             Minecraft.getInstance().player.sendSystemMessage(Component.literal("[Anode] Tracked attempt"));
             Minecraft.getInstance().getHotbarManager();
+        }
+    }
+
+    public static void processContainerOpened(Component component){
+        if (!ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)).equals("Titans Valor: Territories")) return;
+        AbstractContainerMenu menu = Minecraft.getInstance().player.containerMenu;
+        List<ItemStack> items = menu.getItems();
+        for (int i = 0; i < items.size(); i++){
+            //Add a check here if terr or not
+            //query
+            //set
         }
     }
 
