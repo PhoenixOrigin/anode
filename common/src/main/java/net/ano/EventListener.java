@@ -1,5 +1,8 @@
 package net.ano;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.ano.mixin.BossHealthAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -51,11 +54,16 @@ public class EventListener {
         if (!ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)).equals("Titans Valor: Territories")) return;
         AbstractContainerMenu menu = Minecraft.getInstance().player.containerMenu;
         List<ItemStack> items = menu.getItems();
+        JsonObject territories = WebUtils.readJsonFromUrl("http://38.242.159.42:6969/conn.json");
+        JsonObject owners = WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList").getAsJsonObject("territories");
         for (int i = 0; i < items.size(); i++){
             ItemStack stack = items.get(i);
             String name = ChatFormatting.stripFormatting(ComponentUtils.getCoded(stack.getDisplayName());
             if(name.equals("Back")) continue;
-
+            JsonArray connections = territories.get(name).getAsJsonObject().get("Trading Routes").getAsJsonArray();
+            for(JsonElement element : connections.asList()){
+                // do processing im too tired rn
+            }
         }
     }
 
