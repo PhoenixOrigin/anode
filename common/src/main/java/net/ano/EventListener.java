@@ -13,9 +13,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,13 +56,28 @@ public class EventListener {
         JsonObject owners = WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList").getAsJsonObject("territories");
         for (int i = 0; i < items.size(); i++){
             ItemStack stack = items.get(i);
-            String name = ChatFormatting.stripFormatting(ComponentUtils.getCoded(stack.getDisplayName());
+            String name = ChatFormatting.stripFormatting(ComponentUtils.getCoded(stack.getDisplayName()));
             if(name.equals("Back")) continue;
             JsonArray connections = territories.get(name).getAsJsonObject().get("Trading Routes").getAsJsonArray();
+            boolean choked = true;
             for(JsonElement element : connections.asList()){
-                // do processing im too tired rn
+                String connection = element.getAsString();
+                owners.get(connection).getAsJsonObject().get("guild").getAsString();
             }
         }
+    }
+
+    public static List<String> visitConnections(String terr, JsonObject connections, JsonObject owners, List<String> connected){
+        if (connected.contains(terr)) return Collections.emptyList(); else connected.add(terr);
+        for(JsonElement connection : connections.get(terr).getAsJsonObject().getAsJsonArray("connections").asList()){
+            String territory = connection.getAsString();
+            if(owners.getAsJsonObject(territory).get("guild").getAsString().equals("Titans Valor")){
+                if (connected.contains(territory)) continue; else connected.add(terr);
+                connected.addAll(visitConnections(territory, connections, owners, connected));
+            }
+        }
+
+        return connected;
     }
 
 }
