@@ -11,18 +11,9 @@ public class TerritoryManager {
         visited.add(t);
 
         for (Territory connection : t.connections) {
-            if (!visited.contains(connection)) {
-                depthFirstSearch(connection, visited);
-            }
+            if (visited.contains(connection) || !connection.guild.name.equals(t.guild.name)) continue;
+            depthFirstSearch(connection, visited);
         }
-    }
-
-    public Set<Territory> findConnectedTerritories(Guild guild) {
-        Set<Territory> visited = new HashSet<>();
-
-        depthFirstSearch(guild.headquarters, visited);
-
-        return visited;
     }
 
     public class Territory {
@@ -44,10 +35,37 @@ public class TerritoryManager {
     public class Guild {
         String name;
         Territory headquarters;
+        List<Territory> territories;
 
-        public Guild(String name, Territory headquarters) {
+        public Guild(String name) {
             this.name = name;
+        }
+
+        public void setTerritories(List<Territory> territories){
+            this.territories = territories;
+        }
+
+        public void setHeadquarters(Territory headquarters){
             this.headquarters = headquarters;
+        }
+
+        public Set<Territory> findConnectedTerritories() {
+            Set<Territory> visited = new HashSet<>();
+
+            depthFirstSearch(headquarters, visited);
+
+            return visited;
+        }
+
+        public Set<Territory> findUnconnectedTerritories(){
+            Set<Territory> visited = new HashSet<>();
+            Set<Territory> unvisited = new HashSet<>();
+            depthFirstSearch(headquarters, visited);
+            for(Territory t : territories){
+                if(!visited.contains(t)) unvisited.add(t);
+            }
+
+            return unvisited;
         }
     }
 }
