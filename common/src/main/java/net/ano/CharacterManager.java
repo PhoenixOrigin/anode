@@ -12,6 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +22,7 @@ public class CharacterManager {
     private static boolean compassMenu = false;
     private static final Pattern INFO_MENU_CLASS_PATTERN
             = Pattern.compile("§7Class: §r§f(.+)");
+    private static volatile boolean updated = false;
     public static void openClassMenu(){
         Minecraft mc = Minecraft.getInstance();
         ClientPacketListener packets = mc.getConnection();
@@ -40,6 +43,7 @@ public class CharacterManager {
 
             if (classMatcher.matches()) {
                 anode.classname = classMatcher.group(1);
+                updated = true;
                 return;
             }
         }
@@ -47,6 +51,12 @@ public class CharacterManager {
 
     public static void containerOpen(ClientboundOpenScreenPacket packet){
         if(ChatFormatting.stripFormatting(packet.getTitle().getString()).equals("Character Info")) compassMenu = true;
+    }
+
+    public static String getPlayerClass(){
+        openClassMenu();
+        while(!updated);
+        return anode.classname;
     }
 
 }
