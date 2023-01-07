@@ -22,7 +22,6 @@ public class CharacterManager {
     private static boolean compassMenu = false;
     private static final Pattern INFO_MENU_CLASS_PATTERN
             = Pattern.compile("§7Class: §r§f(.+)");
-    private static volatile boolean updated = false;
     public static void openClassMenu(){
         Minecraft mc = Minecraft.getInstance();
         ClientPacketListener packets = mc.getConnection();
@@ -43,7 +42,6 @@ public class CharacterManager {
 
             if (classMatcher.matches()) {
                 anode.classname = classMatcher.group(1);
-                updated = true;
                 return;
             }
         }
@@ -51,12 +49,6 @@ public class CharacterManager {
 
     public static void containerOpen(ClientboundOpenScreenPacket packet){
         if(ChatFormatting.stripFormatting(packet.getTitle().getString()).equals("Character Info")) compassMenu = true;
-    }
-
-    public static String getPlayerClass(){
-        openClassMenu();
-        while(!updated);
-        return anode.classname;
     }
 
 }

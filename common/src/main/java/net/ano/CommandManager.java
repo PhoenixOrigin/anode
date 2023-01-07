@@ -86,7 +86,8 @@ public class CommandManager {
     }
 
     private int getPlayerClass(CommandContext<CommandSourceStack> context){
-        context.getSource().sendSuccess(Component.literal("Successfully tracker class as: " + CharacterManager.getPlayerClass()), false);
+        CharacterManager.openClassMenu();
+        context.getSource().sendSuccess(Component.literal("Successfully tracker class"), false);
         return 0;
     }
 
