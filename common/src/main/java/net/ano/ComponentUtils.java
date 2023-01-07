@@ -1,10 +1,7 @@
 package net.ano;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.*;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -17,6 +14,13 @@ public class ComponentUtils {
         component.visit(new CodedStringGenerator(result), Style.EMPTY);
 
         return result.toString();
+    }
+
+    public static String getCoded(String jsonString) {
+        MutableComponent component = Component.Serializer.fromJson(jsonString);
+        if (component == null) return null;
+
+        return getCoded(component);
     }
 
     public static Optional<ChatFormatting> getChatFormatting(TextColor textColor) {

@@ -49,6 +49,10 @@ public class TerritoryManager {
             this.headquarters = headquarters;
         }
 
+        public void addTerritory(Territory territory){
+            territories.add(territory);
+        }
+
         public Set<Territory> findConnectedTerritories() {
             Set<Territory> visited = new HashSet<>();
 

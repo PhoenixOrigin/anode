@@ -1,7 +1,5 @@
 package net.ano;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.ano.mixin.BossHealthAccessor;
 import net.minecraft.ChatFormatting;
@@ -13,8 +11,9 @@ import net.minecraft.world.item.ItemStack;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
-import java.util.logging.Logger;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,7 +33,7 @@ public class EventListener {
             String towerString = String.format("{\"owner\": \"%s\", \"territory\": \"%s\", \"health\": %d, \"defense\": %f, \"damage\": \"%s\", \"attackSpeed\": %f}",
                     tower.group(1), tower.group(2), Integer.parseInt(tower.group(3)), Float.parseFloat(tower.group(4)), tower.group(5), Float.parseFloat(tower.group(6)));
             String jsonString = String.format("{\"class_\": \"%s\", \"name\": \"%s\",  \"uuid\": \"%s\", \"tower\": %s}",
-                    "Mage", Minecraft.getInstance().player.getName().getString(), Minecraft.getInstance().player.getUUID().toString(), towerString
+                    anode.classname, Minecraft.getInstance().player.getName().getString(), Minecraft.getInstance().player.getUUID().toString(), towerString
             );
             String response;
             try {
@@ -58,26 +57,8 @@ public class EventListener {
             ItemStack stack = items.get(i);
             String name = ChatFormatting.stripFormatting(ComponentUtils.getCoded(stack.getDisplayName()));
             if(name.equals("Back")) continue;
-            JsonArray connections = territories.get(name).getAsJsonObject().get("Trading Routes").getAsJsonArray();
-            boolean choked = true;
-            for(JsonElement element : connections.asList()){
-                String connection = element.getAsString();
-                owners.get(connection).getAsJsonObject().get("guild").getAsString();
-            }
-        }
-    }
 
-    public static List<String> visitConnections(String terr, JsonObject connections, JsonObject owners, List<String> connected){
-        if (connected.contains(terr)) return Collections.emptyList(); else connected.add(terr);
-        for(JsonElement connection : connections.get(terr).getAsJsonObject().getAsJsonArray("connections").asList()){
-            String territory = connection.getAsString();
-            if(owners.getAsJsonObject(territory).get("guild").getAsString().equals("Titans Valor")){
-                if (connected.contains(territory)) continue; else connected.add(terr);
-                connected.addAll(visitConnections(territory, connections, owners, connected));
-            }
         }
-
-        return connected;
     }
 
 }
