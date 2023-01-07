@@ -40,6 +40,7 @@ public class CharacterManager {
 
             if (classMatcher.matches()) {
                 anode.classname = classMatcher.group(1);
+                return;
             }
         }
     }
