@@ -38,54 +38,54 @@ public class CommandManager {
     private int serverHelp(CommandContext<CommandSourceStack> context) {
         MutableComponent help = Component.literal(
                 ChatFormatting.RED +
-                """
-                ANODE Help Message
-                
-                Commands:
-                    getClass:
-                        Usage: /anode getclass
-                               /anode gc
-                        Description: Opens the compass menu and analyses your class for wars. Opening your compass menu has the same effect
-                        Status: STABLE
-                    getFeatures:
-                        Usage: /anode getFeatures
-                               /anode gf
-                        Description: Prints a list of anode features
-                        Status: STABLE
-                
-                For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 
-                """);
+                        """
+                                ANODE Help Message
+                                                
+                                Commands:
+                                    getClass:
+                                        Usage: /anode getclass
+                                               /anode gc
+                                        Description: Opens the compass menu and analyses your class for wars. Opening your compass menu has the same effect
+                                        Status: STABLE
+                                    getFeatures:
+                                        Usage: /anode getFeatures
+                                               /anode gf
+                                        Description: Prints a list of anode features
+                                        Status: STABLE
+                                                
+                                For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 
+                                """);
 
         context.getSource().sendSuccess(help, false);
 
         return 1;
     }
 
-    private int getFeatures(CommandContext<CommandSourceStack> context){
+    private int getFeatures(CommandContext<CommandSourceStack> context) {
         MutableComponent help = Component.literal(
                 ChatFormatting.RED +
                         """
-                        ANODE Features List
-                        
-                        Features:
-                            warChoke:
-                                Usage: Triggers on GUI open
-                                Description: Changes the texture of choked territories. Uses 2 api calls
-                                Status: BETA
-                            warTrack:
-                                Usage: Automatically triggers after a war starts
-                                Description: When you get into the war, it will parse the territory data and your class and send it to our war tracking api
-                                Status: STABLE
-                        
-                        For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 
-                        """);
+                                ANODE Features List
+                                                        
+                                Features:
+                                    warChoke:
+                                        Usage: Triggers on GUI open
+                                        Description: Changes the texture of choked territories. Uses 2 api calls
+                                        Status: BETA
+                                    warTrack:
+                                        Usage: Automatically triggers after a war starts
+                                        Description: When you get into the war, it will parse the territory data and your class and send it to our war tracking api
+                                        Status: STABLE
+                                                        
+                                For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 
+                                """);
 
         context.getSource().sendSuccess(help, false);
 
         return 0;
     }
 
-    private int getPlayerClass(CommandContext<CommandSourceStack> context){
+    private int getPlayerClass(CommandContext<CommandSourceStack> context) {
         CharacterManager.openClassMenu();
         context.getSource().sendSuccess(Component.literal("Successfully tracker class"), false);
         return 0;

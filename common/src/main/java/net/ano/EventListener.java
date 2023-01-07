@@ -21,21 +21,23 @@ public class EventListener {
 
     private static final Pattern pattern = Pattern.compile("§3\\[WAR§3] The battle has begun!");
     private static final Pattern towerPattern = Pattern.compile("§3\\[([a-zA-Z0-9]{3,4})] §b([a-zA-Z0-9 ]{3,})§7 - §4❤ ([0-9]*)§7 \\(§6(\\d+\\.?\\d*%)§7\\) - §c☠ ([0-9]*-[0-9]*)§7 \\(§b(\\d+\\.?\\d*)x§7\\)");
+
     public static void processChat(Component component) {
-        if(ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)).equals("[WAR] 5 seconds...")) CharacterManager.openClassMenu();
+        if (ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)).equals("[WAR] 5 seconds..."))
+            CharacterManager.openClassMenu();
         Matcher matcher = pattern.matcher(ComponentUtils.getCoded(component));
         if (!matcher.matches()) return;
         CharacterManager.openClassMenu();
         BossHealthAccessor overlay = (BossHealthAccessor) Minecraft.getInstance().gui.getBossOverlay();
-        for (Map.Entry<UUID, LerpingBossEvent> entry : overlay.getBossBars().entrySet()){
+        for (Map.Entry<UUID, LerpingBossEvent> entry : overlay.getBossBars().entrySet()) {
             LerpingBossEvent event = entry.getValue();
             String name = ComponentUtils.getCoded(event.getName());
             Matcher tower = towerPattern.matcher(name);
-            if(!tower.matches()) continue;
+            if (!tower.matches()) continue;
             String towerString = String.format("{\"owner\": \"%s\", \"territory\": \"%s\", \"health\": %d, \"defense\": %f, \"damage\": \"%s\", \"attackSpeed\": %f}",
                     tower.group(1), tower.group(2), Integer.parseInt(tower.group(3)), Float.parseFloat(tower.group(4)), tower.group(5), Float.parseFloat(tower.group(6)));
             String jsonString = String.format("{\"class_\": \"%s\", \"name\": \"%s\",  \"uuid\": \"%s\", \"tower\": %s}",
-                    anode.classname, Minecraft.getInstance().player.getName().getString(), Minecraft.getInstance().player.getUUID().toString(), towerString
+                    anode.classname, Minecraft.getInstance().player.getName().getString(), Minecraft.getInstance().player.getUUID(), towerString
             );
             String response;
             try {
@@ -49,16 +51,17 @@ public class EventListener {
         }
     }
 
-    public static void processContainerOpened(Component component){
-        if (!ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)).equals("Titans Valor: Territories")) return;
+    public static void processContainerOpened(Component component) {
+        if (!ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)).equals("Titans Valor: Territories"))
+            return;
         AbstractContainerMenu menu = Minecraft.getInstance().player.containerMenu;
         List<ItemStack> items = menu.getItems();
         JsonObject territories = WebUtils.readJsonFromUrl("http://38.242.159.42:6969/conn.json");
         JsonObject owners = WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList").getAsJsonObject("territories");
-        for (int i = 0; i < items.size(); i++){
+        for (int i = 0; i < items.size(); i++) {
             ItemStack stack = items.get(i);
             String name = ChatFormatting.stripFormatting(ComponentUtils.getCoded(stack.getDisplayName()));
-            if(name.equals("Back")) continue;
+            if (name.equals("Back")) continue;
 
         }
     }

@@ -41,15 +41,15 @@ public class TerritoryManager {
             this.name = name;
         }
 
-        public void setTerritories(List<Territory> territories){
+        public void setTerritories(List<Territory> territories) {
             this.territories = territories;
         }
 
-        public void setHeadquarters(Territory headquarters){
+        public void setHeadquarters(Territory headquarters) {
             this.headquarters = headquarters;
         }
 
-        public void addTerritory(Territory territory){
+        public void addTerritory(Territory territory) {
             territories.add(territory);
         }
 
@@ -61,12 +61,12 @@ public class TerritoryManager {
             return visited;
         }
 
-        public Set<Territory> findUnconnectedTerritories(){
+        public Set<Territory> findUnconnectedTerritories() {
             Set<Territory> visited = new HashSet<>();
             Set<Territory> unvisited = new HashSet<>();
             depthFirstSearch(headquarters, visited);
-            for(Territory t : territories){
-                if(!visited.contains(t)) unvisited.add(t);
+            for (Territory t : territories) {
+                if (!visited.contains(t)) unvisited.add(t);
             }
 
             return unvisited;

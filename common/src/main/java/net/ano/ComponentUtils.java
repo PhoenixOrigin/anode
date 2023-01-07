@@ -79,16 +79,6 @@ public class ComponentUtils {
             oldStyle = Style.EMPTY;
         }
 
-        @Override
-        public Optional<Object> accept(Style style, String string) {
-            handleStyleDifference(oldStyle, style, result);
-            result.append(string);
-
-            oldStyle = style;
-
-            return Optional.empty();
-        }
-
         /**
          * This method handles the fact that the style likely has changed between 2 components
          *
@@ -119,6 +109,16 @@ public class ComponentUtils {
             if (newStyle.isUnderlined()) result.append(ChatFormatting.UNDERLINE);
             if (newStyle.isStrikethrough()) result.append(ChatFormatting.STRIKETHROUGH);
             if (newStyle.isObfuscated()) result.append(ChatFormatting.OBFUSCATED);
+        }
+
+        @Override
+        public Optional<Object> accept(Style style, String string) {
+            handleStyleDifference(oldStyle, style, result);
+            result.append(string);
+
+            oldStyle = style;
+
+            return Optional.empty();
         }
     }
 

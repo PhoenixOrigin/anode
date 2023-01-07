@@ -9,20 +9,18 @@ import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CharacterManager {
 
-    private static boolean compassMenu = false;
     private static final Pattern INFO_MENU_CLASS_PATTERN
             = Pattern.compile("§7Class: §r§f(.+)");
-    public static void openClassMenu(){
+    private static boolean compassMenu = false;
+
+    public static void openClassMenu() {
         Minecraft mc = Minecraft.getInstance();
         ClientPacketListener packets = mc.getConnection();
         int prevItem = mc.player.getInventory().selected;
@@ -31,13 +29,13 @@ public class CharacterManager {
         packets.send(new ServerboundSetCarriedItemPacket(prevItem));
     }
 
-    public static void containerItemsSet(ClientboundContainerSetContentPacket packet){
-        if(!compassMenu) return;
+    public static void containerItemsSet(ClientboundContainerSetContentPacket packet) {
+        if (!compassMenu) return;
         ItemStack stack = packet.getItems().get(7);
         Minecraft.getInstance().player.closeContainer();
         compassMenu = false;
         List<String> lore = ItemUtils.getLore(stack);
-        for (String line : lore){
+        for (String line : lore) {
             Matcher classMatcher = INFO_MENU_CLASS_PATTERN.matcher(line);
 
             if (classMatcher.matches()) {
@@ -47,8 +45,8 @@ public class CharacterManager {
         }
     }
 
-    public static void containerOpen(ClientboundOpenScreenPacket packet){
-        if(ChatFormatting.stripFormatting(packet.getTitle().getString()).equals("Character Info")) compassMenu = true;
+    public static void containerOpen(ClientboundOpenScreenPacket packet) {
+        if (ChatFormatting.stripFormatting(packet.getTitle().getString()).equals("Character Info")) compassMenu = true;
     }
 
 }
