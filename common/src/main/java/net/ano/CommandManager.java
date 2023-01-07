@@ -15,7 +15,7 @@ public class CommandManager {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralCommandNode<CommandSourceStack> node = dispatcher.register(new CommandManager().getBaseCommandBuilder());
-        dispatcher.register(Commands.literal("anode").redirect(node));
+        dispatcher.register(node.createBuilder());
     }
 
     public LiteralArgumentBuilder<CommandSourceStack> getBaseCommandBuilder() {
@@ -27,7 +27,7 @@ public class CommandManager {
                 .executes(this::getFeatures)
                 .build();
 
-        return Commands.literal("server")
+        return Commands.literal("ano")
                 .then(getClassNode)
                 .then(Commands.literal("gc").redirect(getClassNode))
                 .then(getFeaturesNode)
@@ -51,6 +51,10 @@ public class CommandManager {
                                         Usage: /anode getFeatures
                                                /anode gf
                                         Description: Prints a list of anode features
+                                        Status: STABLE
+                                    help:
+                                        Usage: /anode <anything>
+                                        Description: Help Menu (this)
                                         Status: STABLE
                                                 
                                 For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 

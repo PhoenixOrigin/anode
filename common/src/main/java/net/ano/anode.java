@@ -15,8 +15,6 @@ public class anode {
         logger = Logger.getAnonymousLogger();
         CommandDispatcher<CommandSourceStack> disp = new CommandDispatcher<>();
         CommandManager.register(disp);
-
     }
-
 
 }
