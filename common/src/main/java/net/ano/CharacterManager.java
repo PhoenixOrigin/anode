@@ -1,7 +1,6 @@
 package net.ano;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
@@ -21,18 +20,17 @@ public class CharacterManager {
     private static boolean compassMenu = false;
 
     public static void openClassMenu() {
-        Minecraft mc = anode.minecraft;
-        ClientPacketListener packets = mc.getConnection();
-        int prevItem = mc.player.getInventory().selected;
-        packets.send(new ServerboundSetCarriedItemPacket(6));
-        packets.send(new ServerboundUseItemPacket(InteractionHand.MAIN_HAND, 1));
-        packets.send(new ServerboundSetCarriedItemPacket(prevItem));
+        ClientPacketListener connection = anode.getConnection();
+        int prevItem = anode.getPlayer().getInventory().selected;
+        connection.send(new ServerboundSetCarriedItemPacket(6));
+        connection.send(new ServerboundUseItemPacket(InteractionHand.MAIN_HAND, 1));
+        connection.send(new ServerboundSetCarriedItemPacket(prevItem));
     }
 
     public static void containerItemsSet(ClientboundContainerSetContentPacket packet) {
         if (!compassMenu) return;
         ItemStack stack = packet.getItems().get(7);
-        anode.minecraft.player.closeContainer();
+        anode.getPlayer().closeContainer();
         compassMenu = false;
         List<String> lore = ItemUtils.getLore(stack);
         for (String line : lore) {

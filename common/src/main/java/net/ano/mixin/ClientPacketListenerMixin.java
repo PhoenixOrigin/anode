@@ -42,8 +42,7 @@ public abstract class ClientPacketListenerMixin {
         if (ci.isCancellable()) ci.cancel();
 
         try {
-            assert anode.minecraft.player != null;
-            anode.node.parse(new StringReader(string), new CommandContextBuilder<>(anode.disp, anode.minecraft.player.createCommandSourceStack(), anode.node, 0));
+            anode.node.parse(new StringReader(string), new CommandContextBuilder<>(anode.disp, anode.getPlayer().createCommandSourceStack(), anode.node, 0));
         } catch (CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
