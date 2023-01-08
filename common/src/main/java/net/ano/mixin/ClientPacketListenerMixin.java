@@ -36,28 +36,16 @@ public abstract class ClientPacketListenerMixin {
     }
 
     @Inject(
-            method = "sendChat",
-            at = @At(
-                    value = "HEAD"
-            )
-    )
-    public void onChatSend(String string, CallbackInfo ci){
-        assert string.startsWith("/ano") || string.startsWith("/anode");
-
-        try {
-            anode.node.parse(new StringReader(string), new CommandContextBuilder<CommandSourceStack>(anode.disp, Minecraft.getInstance().player.createCommandSourceStack(), anode.node, 0));
-        } catch (CommandSyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Inject(
             method = "sendCommand",
             at = @At(
                     value = "HEAD"
-            )
+            ),
+            cancellable = true
     )
     private void sendCommand(String string, CallbackInfo ci){
+        assert string.startsWith("/anode");
+        if(ci.isCancellable()) ci.cancel();
+
         try {
             anode.node.parse(new StringReader(string), new CommandContextBuilder<>(anode.disp, Minecraft.getInstance().player.createCommandSourceStack(), anode.node, 0));
         } catch (CommandSyntaxException e) {
