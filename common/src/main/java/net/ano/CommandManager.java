@@ -23,7 +23,7 @@ public class CommandManager {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralCommandNode<CommandSourceStack> node = dispatcher.register(new CommandManager().getBaseCommandBuilder());
-        anode.node = dispatcher.register(Commands.literal("anode").redirect(node));
+        dispatcher.register(Commands.literal("ano").redirect(node));
     }
 
     public LiteralArgumentBuilder<CommandSourceStack> getBaseCommandBuilder() {
@@ -31,15 +31,23 @@ public class CommandManager {
                 .executes(this::getPlayerClass)
                 .build();
 
+        LiteralCommandNode<CommandSourceStack> gcNode = Commands.literal("gc")
+                .executes(this::getPlayerClass)
+                .build();
+
         LiteralCommandNode<CommandSourceStack> getFeaturesNode = Commands.literal("getFeatures")
+                .executes(this::getFeatures)
+                .build();
+
+        LiteralCommandNode<CommandSourceStack> gfNode = Commands.literal("gf")
                 .executes(this::getFeatures)
                 .build();
 
         return Commands.literal("anode")
                 .then(getClassNode)
-                .then(Commands.literal("gc").redirect(getClassNode))
+                .then(gcNode)
                 .then(getFeaturesNode)
-                .then(Commands.literal("gf").redirect(getFeaturesNode))
+                .then(gfNode)
                 .executes(this::serverHelp);
     }
 
@@ -79,7 +87,7 @@ public class CommandManager {
                                     getClass:
                                         Usage: /anode getClass
                                                /anode gc
-                                        Description: Opens the compass menu and analyses your class for wars. Opening your compass menu has the same effect
+                                        Description: Opens the compass menu and analyses your class for wars.
                                         Status: STABLE
                                     getFeatures:
                                         Usage: /anode getFeatures
@@ -91,7 +99,7 @@ public class CommandManager {
                                         Description: Help Menu (this)
                                         Status: STABLE
                                       
-                                For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member.
+                                For any bugs / glitches message PhoenixOrigin#7083, Andrew#9823 or any high ranking titan's brilliance member.
                                 """);
 
         context.getSource().sendSuccess(help, false);
@@ -108,11 +116,11 @@ public class CommandManager {
                                 Features:
                                     warChoke:
                                         Usage: Triggers on GUI open
-                                        Description: Changes the texture of choked territories. Uses 2 api calls
+                                        Description: Changes the texture of choked territories.
                                         Status: ALPHA
                                     warTrack:
                                         Usage: Automatically triggers after a war starts
-                                        Description: When you get into the war, it will parse the territory data and your class and send it to our war tracking api
+                                        Description: Sends war attempts to API.
                                         Status: BETA
                                                         
                                 For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member.

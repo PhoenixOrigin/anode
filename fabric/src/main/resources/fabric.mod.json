@@ -5,16 +5,14 @@
   "name": "Ano Mod",
   "description": "The official ANO multipurpose mod.",
   "authors": [
-    "PhoenixOrigin",
-    "_Wolv_",
-    "Aezuh"
+    "PhoenixOrigin"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": " https://discord.gg/h8XUHkR",
+    "sources": "https://github.com/PhoenixOrigin/anode"
   },
   "license": "Insert License Here",
-  "icon": "assets/examplemod/icon.png",
+  "icon": "assets/anode/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [

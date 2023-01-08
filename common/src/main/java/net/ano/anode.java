@@ -14,7 +14,6 @@ public class anode {
     public static Logger logger = null;
     public static String classname;
     public static CommandDispatcher<CommandSourceStack> disp = null;
-    public static LiteralCommandNode<CommandSourceStack> node = null;
     private static Minecraft minecraft = null;
     private static LocalPlayer player = null;
     private static ClientPacketListener connection = null;
@@ -29,14 +28,23 @@ public class anode {
     }
 
     public static LocalPlayer getPlayer() {
+        if(player == null){
+            player = Minecraft.getInstance().player;
+        }
         return player;
     }
 
     public static Minecraft getMc() {
+        if(minecraft == null){
+            minecraft = Minecraft.getInstance();
+        }
         return minecraft;
     }
 
     public static ClientPacketListener getConnection() {
+        if(connection == null){
+            connection = Minecraft.getInstance().getConnection();
+        }
         return connection;
     }
 
