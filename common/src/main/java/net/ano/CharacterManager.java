@@ -10,6 +10,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +46,7 @@ public class CharacterManager {
     }
 
     public static void containerOpen(ClientboundOpenScreenPacket packet) {
-        if (ChatFormatting.stripFormatting(packet.getTitle().getString()).equals("Character Info")) compassMenu = true;
+        if (Objects.equals(ChatFormatting.stripFormatting(packet.getTitle().getString()), "Character Info")) compassMenu = true;
     }
 
 }

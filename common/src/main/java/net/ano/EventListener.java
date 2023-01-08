@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +23,7 @@ public class EventListener {
     private static final Pattern towerPattern = Pattern.compile("§3\\[([a-zA-Z0-9]{3,4})] §b([a-zA-Z0-9 ]{3,})§7 - §4❤ ([0-9]*)§7 \\(§6(\\d+\\.?\\d*%)§7\\) - §c☠ ([0-9]*-[0-9]*)§7 \\(§b(\\d+\\.?\\d*)x§7\\)");
 
     public static void processChat(Component component) {
-        if (ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)).equals("[WAR] 5 seconds..."))
+        if (Objects.equals(ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)), "[WAR] 5 seconds..."))
             CharacterManager.openClassMenu();
         Matcher matcher = pattern.matcher(ComponentUtils.getCoded(component));
         if (!matcher.matches()) return;
@@ -51,16 +52,18 @@ public class EventListener {
     }
 
     public static void processContainerOpened(Component component) {
-        if (!ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)).equals("Titans Valor: Territories"))
+        if (!Objects.equals(ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)), "Titans Valor: Territories"))
             return;
         AbstractContainerMenu menu = anode.getPlayer().containerMenu;
         List<ItemStack> items = menu.getItems();
         JsonObject territories = WebUtils.readJsonFromUrl("http://38.242.159.42:6969/conn.json");
-        JsonObject owners = WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList").getAsJsonObject("territories");
-        for (int i = 0; i < items.size(); i++) {
-            ItemStack stack = items.get(i);
+        JsonObject owners = Objects.requireNonNull(WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList")).getAsJsonObject("territories");
+        for (ItemStack stack : items) {
             String name = ChatFormatting.stripFormatting(ComponentUtils.getCoded(stack.getDisplayName()));
-            if (name.equals("Back")) continue;
+            assert name != null;
+            if (name.equals("Back")) {
+                //process
+            }
 
         }
     }

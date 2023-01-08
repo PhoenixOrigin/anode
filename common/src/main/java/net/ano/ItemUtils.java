@@ -29,6 +29,7 @@ public class ItemUtils {
         if (display == null || display.getType() != CompoundTag.TYPE || !display.contains("Lore")) return null;
         Tag loreBase = display.get("Lore");
 
+        assert loreBase != null;
         if (loreBase.getType() != ListTag.TYPE) return null;
         return (ListTag) loreBase;
     }

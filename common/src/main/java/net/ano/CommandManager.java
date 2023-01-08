@@ -91,7 +91,7 @@ public class CommandManager {
                                         Description: Help Menu (this)
                                         Status: STABLE
                                       
-                                For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 
+                                For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member.
                                 """);
 
         context.getSource().sendSuccess(help, false);
@@ -115,7 +115,7 @@ public class CommandManager {
                                         Description: When you get into the war, it will parse the territory data and your class and send it to our war tracking api
                                         Status: BETA
                                                         
-                                For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 
+                                For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member.
                                 """);
 
         context.getSource().sendSuccess(help, false);

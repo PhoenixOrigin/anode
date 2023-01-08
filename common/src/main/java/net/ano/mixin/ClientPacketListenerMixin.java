@@ -64,6 +64,7 @@ public abstract class ClientPacketListenerMixin {
     )
     private void handleOpenScreen(ClientboundOpenScreenPacket packet, CallbackInfo ci) {
         CharacterManager.containerOpen(packet);
+        EventListener.processContainerOpened(packet.getTitle());
     }
 
     @Inject(
