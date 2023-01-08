@@ -27,6 +27,14 @@ public class CommandManager {
     }
 
     public LiteralArgumentBuilder<CommandSourceStack> getBaseCommandBuilder() {
+        LiteralCommandNode<CommandSourceStack> updateClassNode = Commands.literal("updateClass")
+                .executes(this::updatePlayerClass)
+                .build();
+
+        LiteralCommandNode<CommandSourceStack> ucNode = Commands.literal("uc")
+                .executes(this::updatePlayerClass)
+                .build();
+
         LiteralCommandNode<CommandSourceStack> getClassNode = Commands.literal("getClass")
                 .executes(this::getPlayerClass)
                 .build();
@@ -46,6 +54,8 @@ public class CommandManager {
         return Commands.literal("anode")
                 .then(getClassNode)
                 .then(gcNode)
+                .then(updateClassNode)
+                .then(ucNode)
                 .then(getFeaturesNode)
                 .then(gfNode)
                 .executes(this::serverHelp);
@@ -84,18 +94,30 @@ public class CommandManager {
                                 ANODE Help Message
                                                 
                                 Commands:
+                                    updateClass:
+                                        Usage: /anode updateClass
+                                               /anode uc
+                                               /ano updateClass
+                                               /ano uc
+                                        Description: Analyzes your current class.
+                                        Status: STABLE
                                     getClass:
                                         Usage: /anode getClass
                                                /anode gc
-                                        Description: Opens the compass menu and analyses your class for wars.
+                                               /ano getClass
+                                               /ano gc
+                                        Description: Prints your current class.
                                         Status: STABLE
                                     getFeatures:
                                         Usage: /anode getFeatures
                                                /anode gf
+                                               /ano getFeatures
+                                               /ano gf
                                         Description: Prints a list of anode features
                                         Status: STABLE
                                     help:
                                         Usage: /anode <anything>
+                                               /ano <anything>
                                         Description: Help Menu (this)
                                         Status: STABLE
                                       
@@ -131,9 +153,14 @@ public class CommandManager {
         return 0;
     }
 
-    private int getPlayerClass(CommandContext<CommandSourceStack> context) {
+    private int updatePlayerClass(CommandContext<CommandSourceStack> context) {
         CharacterManager.openClassMenu();
         context.getSource().sendSuccess(Component.literal("Successfully tracker class"), false);
+        return 0;
+    }
+
+    private int getPlayerClass(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(Component.literal(ChatFormatting.AQUA + "Current player class: " + anode.classname), false);
         return 0;
     }
 
