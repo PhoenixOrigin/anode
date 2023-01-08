@@ -3,7 +3,6 @@ package net.ano;
 import com.google.gson.JsonObject;
 import net.ano.mixin.BossHealthAccessor;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,7 +27,7 @@ public class EventListener {
         Matcher matcher = pattern.matcher(ComponentUtils.getCoded(component));
         if (!matcher.matches()) return;
         CharacterManager.openClassMenu();
-        BossHealthAccessor overlay = (BossHealthAccessor) Minecraft.getInstance().gui.getBossOverlay();
+        BossHealthAccessor overlay = (BossHealthAccessor) anode.minecraft.gui.getBossOverlay();
         for (Map.Entry<UUID, LerpingBossEvent> entry : overlay.getBossBars().entrySet()) {
             LerpingBossEvent event = entry.getValue();
             String name = ComponentUtils.getCoded(event.getName());
@@ -37,7 +36,7 @@ public class EventListener {
             String towerString = String.format("{\"owner\": \"%s\", \"territory\": \"%s\", \"health\": %d, \"defense\": %f, \"damage\": \"%s\", \"attackSpeed\": %f}",
                     tower.group(1), tower.group(2), Integer.parseInt(tower.group(3)), Float.parseFloat(tower.group(4)), tower.group(5), Float.parseFloat(tower.group(6)));
             String jsonString = String.format("{\"class_\": \"%s\", \"name\": \"%s\",  \"uuid\": \"%s\", \"tower\": %s}",
-                    anode.classname, Minecraft.getInstance().player.getName().getString(), Minecraft.getInstance().player.getUUID(), towerString
+                    anode.classname, anode.minecraft.player.getName().getString(), anode.minecraft.player.getUUID(), towerString
             );
             String response;
             try {
@@ -46,15 +45,15 @@ public class EventListener {
                 throw new RuntimeException(e);
             }
             anode.logger.info(String.format("POST WAR, FROM SERVER: {%s}", response));
-            Minecraft.getInstance().player.sendSystemMessage(Component.literal("[Anode] Tracked attempt"));
-            Minecraft.getInstance().getHotbarManager();
+            anode.minecraft.player.sendSystemMessage(Component.literal("[Anode] Tracked attempt"));
+            anode.minecraft.getHotbarManager();
         }
     }
 
     public static void processContainerOpened(Component component) {
         if (!ChatFormatting.stripFormatting(ComponentUtils.getCoded(component)).equals("Titans Valor: Territories"))
             return;
-        AbstractContainerMenu menu = Minecraft.getInstance().player.containerMenu;
+        AbstractContainerMenu menu = anode.minecraft.player.containerMenu;
         List<ItemStack> items = menu.getItems();
         JsonObject territories = WebUtils.readJsonFromUrl("http://38.242.159.42:6969/conn.json");
         JsonObject owners = WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList").getAsJsonObject("territories");

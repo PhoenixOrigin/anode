@@ -21,7 +21,7 @@ public class CharacterManager {
     private static boolean compassMenu = false;
 
     public static void openClassMenu() {
-        Minecraft mc = Minecraft.getInstance();
+        Minecraft mc = anode.minecraft;
         ClientPacketListener packets = mc.getConnection();
         int prevItem = mc.player.getInventory().selected;
         packets.send(new ServerboundSetCarriedItemPacket(6));
@@ -32,7 +32,7 @@ public class CharacterManager {
     public static void containerItemsSet(ClientboundContainerSetContentPacket packet) {
         if (!compassMenu) return;
         ItemStack stack = packet.getItems().get(7);
-        Minecraft.getInstance().player.closeContainer();
+        anode.minecraft.player.closeContainer();
         compassMenu = false;
         List<String> lore = ItemUtils.getLore(stack);
         for (String line : lore) {

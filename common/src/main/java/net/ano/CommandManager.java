@@ -56,7 +56,7 @@ public class CommandManager {
                                         Usage: /anode <anything>
                                         Description: Help Menu (this)
                                         Status: STABLE
-      
+                                      
                                 For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 
                                 """);
 
@@ -68,7 +68,7 @@ public class CommandManager {
     private int getFeatures(CommandContext<CommandSourceStack> context) {
         MutableComponent help = Component.literal(
                 ChatFormatting.RED +
-                               """
+                        """
                                 ANODE Features List
                                                         
                                 Features:

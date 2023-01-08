@@ -9,8 +9,6 @@ import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL13;
 
 
-
-
 @Mod(anode.MOD_ID)
 public class anodeForge {
     public anodeForge() {
@@ -20,17 +18,17 @@ public class anodeForge {
     @SubscribeEvent
     //@SideOnly(Side.CLIENT)
     public void rotateEntities(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
-            GL13.glPushMatrix();
-            GL13.glTranslatef(0.0F, (float) (event.getEntity().getY()*2f+event.getEntity().getBoundingBox().getYsize()), 0.0F);
-            GL13.glRotatef(180f, 0, 0, 0);
-            GL13.glRotatef(180f, 0, 1, 0);
+        GL13.glPushMatrix();
+        GL13.glTranslatef(0.0F, (float) (event.getEntity().getY() * 2f + event.getEntity().getBoundingBox().getYsize()), 0.0F);
+        GL13.glRotatef(180f, 0, 0, 0);
+        GL13.glRotatef(180f, 0, 1, 0);
 
     }
 
     @SubscribeEvent
     //@SideOnly(Side.CLIENT)
     public void rotateEntities(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
-            GL13.glPopMatrix();
+        GL13.glPopMatrix();
     }
 
 }
