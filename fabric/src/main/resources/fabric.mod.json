@@ -11,7 +11,7 @@
     "homepage": " https://discord.gg/h8XUHkR",
     "sources": "https://github.com/PhoenixOrigin/anode"
   },
-  "license": "Insert License Here",
+  "license": "MIT",
   "icon": "assets/anode/icon.png",
   "environment": "*",
   "entrypoints": {
