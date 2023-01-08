@@ -1,14 +1,22 @@
 package net.ano;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 public class CommandManager {
@@ -34,6 +42,32 @@ public class CommandManager {
                 .then(Commands.literal("gf").redirect(getFeaturesNode))
                 .executes(this::serverHelp);
     }
+
+    public static CompletableFuture<Suggestions> getCompletionSuggestions(String cmd, CommandDispatcher<SharedSuggestionProvider> serverDispatcher, ParseResults<CommandSourceStack> clientParse, ParseResults<SharedSuggestionProvider> serverParse, int cursor) {
+        StringReader stringReader = new StringReader(cmd);
+        if (stringReader.canRead() && stringReader.peek() == '/') {
+            stringReader.skip();
+        }
+
+        CommandDispatcher<CommandSourceStack> clientDispatcher = anode.disp;
+
+        CompletableFuture<Suggestions> clientSuggestions =
+                clientDispatcher.getCompletionSuggestions(clientParse, cursor);
+        CompletableFuture<Suggestions> serverSuggestions =
+                serverDispatcher.getCompletionSuggestions(serverParse, cursor);
+
+        CompletableFuture<Suggestions> result = new CompletableFuture<>();
+
+        CompletableFuture.allOf(clientSuggestions, serverSuggestions).thenRun(() -> {
+            final List<Suggestions> suggestions = new ArrayList<>();
+            suggestions.add(clientSuggestions.join());
+            suggestions.add(serverSuggestions.join());
+            result.complete(Suggestions.merge(stringReader.getString(), suggestions));
+        });
+
+        return result;
+    }
+
 
     private int serverHelp(CommandContext<CommandSourceStack> context) {
         MutableComponent help = Component.literal(

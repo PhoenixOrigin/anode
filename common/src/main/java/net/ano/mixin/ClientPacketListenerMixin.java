@@ -1,12 +1,15 @@
 package net.ano.mixin;
 
+import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.ano.CharacterManager;
 import net.ano.EventListener;
 import net.ano.anode;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
@@ -39,12 +42,17 @@ public abstract class ClientPacketListenerMixin {
     )
     private void sendCommand(String string, CallbackInfo ci) {
         assert string.startsWith("/anode");
+        final ParseResults<CommandSourceStack> parse = anode.disp.parse(new StringReader(string), anode.getPlayer().createCommandSourceStack());
+        if (!parse.getExceptions().isEmpty()
+                || (parse.getContext().getCommand() == null
+                && parse.getContext().getChild() == null)) {
+            return;
+        }
         if (ci.isCancellable()) ci.cancel();
-
         try {
-            anode.node.parse(new StringReader(string), new CommandContextBuilder<>(anode.disp, anode.getPlayer().createCommandSourceStack(), anode.node, 0));
+            anode.disp.execute(parse);
         } catch (CommandSyntaxException e) {
-            throw new RuntimeException(e);
+            anode.getPlayer().sendSystemMessage(Component.literal(ChatFormatting.RED + "Command failure"));
         }
     }
 

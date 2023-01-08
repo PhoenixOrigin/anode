@@ -25,6 +25,7 @@ public class CharacterManager {
         connection.send(new ServerboundSetCarriedItemPacket(6));
         connection.send(new ServerboundUseItemPacket(InteractionHand.MAIN_HAND, 1));
         connection.send(new ServerboundSetCarriedItemPacket(prevItem));
+
     }
 
     public static void containerItemsSet(ClientboundContainerSetContentPacket packet) {
