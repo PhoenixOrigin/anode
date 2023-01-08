@@ -15,7 +15,7 @@ public class CommandManager {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralCommandNode<CommandSourceStack> node = dispatcher.register(new CommandManager().getBaseCommandBuilder());
-        dispatcher.register(node.createBuilder());
+        anode.node = dispatcher.register(Commands.literal("anode").redirect(node));
     }
 
     public LiteralArgumentBuilder<CommandSourceStack> getBaseCommandBuilder() {
@@ -27,11 +27,11 @@ public class CommandManager {
                 .executes(this::getFeatures)
                 .build();
 
-        return Commands.literal("ano")
+        return Commands.literal("anode")
                 .then(getClassNode)
                 .then(Commands.literal("gc").redirect(getClassNode))
                 .then(getFeaturesNode)
-                .then(Commands.literal("gf")).redirect(getFeaturesNode)
+                .then(Commands.literal("gf").redirect(getFeaturesNode))
                 .executes(this::serverHelp);
     }
 
@@ -43,7 +43,7 @@ public class CommandManager {
                                                 
                                 Commands:
                                     getClass:
-                                        Usage: /anode getclass
+                                        Usage: /anode getClass
                                                /anode gc
                                         Description: Opens the compass menu and analyses your class for wars. Opening your compass menu has the same effect
                                         Status: STABLE
@@ -56,7 +56,7 @@ public class CommandManager {
                                         Usage: /anode <anything>
                                         Description: Help Menu (this)
                                         Status: STABLE
-                                                
+      
                                 For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 
                                 """);
 
@@ -68,18 +68,18 @@ public class CommandManager {
     private int getFeatures(CommandContext<CommandSourceStack> context) {
         MutableComponent help = Component.literal(
                 ChatFormatting.RED +
-                        """
+                               """
                                 ANODE Features List
                                                         
                                 Features:
                                     warChoke:
                                         Usage: Triggers on GUI open
                                         Description: Changes the texture of choked territories. Uses 2 api calls
-                                        Status: BETA
+                                        Status: ALPHA
                                     warTrack:
                                         Usage: Automatically triggers after a war starts
                                         Description: When you get into the war, it will parse the territory data and your class and send it to our war tracking api
-                                        Status: STABLE
+                                        Status: BETA
                                                         
                                 For any bugs / glitches message PhoenixOrigin#7083, Wolv#1065, Andrew#9823 or any high ranking titan's brilliance member. 
                                 """);
