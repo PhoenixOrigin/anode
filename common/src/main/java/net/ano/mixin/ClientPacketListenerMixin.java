@@ -18,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.logging.Level;
+
 @Mixin(ClientPacketListener.class)
 public abstract class ClientPacketListenerMixin {
 
@@ -63,8 +65,12 @@ public abstract class ClientPacketListenerMixin {
             )
     )
     private void handleOpenScreen(ClientboundOpenScreenPacket packet, CallbackInfo ci) {
-        CharacterManager.containerOpen(packet);
-        EventListener.processContainerOpened(packet.getTitle());
+        try {
+            CharacterManager.containerOpen(packet);
+            EventListener.processContainerOpened(packet.getTitle());
+        } catch(Exception e){
+            anode.logger.log(Level.SEVERE, e.getMessage());
+        }
     }
 
     @Inject(
@@ -74,7 +80,11 @@ public abstract class ClientPacketListenerMixin {
             )
     )
     private void handleContainerItemsSet(ClientboundContainerSetContentPacket packet, CallbackInfo ci) {
-        CharacterManager.containerItemsSet(packet);
+        try {
+            CharacterManager.containerItemsSet(packet);
+        } catch(Exception e){
+            anode.logger.log(Level.SEVERE, e.getMessage());
+        }
     }
 
 }

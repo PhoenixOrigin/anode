@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,8 +42,8 @@ public class EventListener {
             );
             String response;
             try {
-                response = WebUtils.postAPI(new URL("http://38.242.159.42:6969/postwar"), jsonString);
-            } catch (IOException e) {
+                response = WebUtils.postAPI(new URL("http://38.242.159.42:6969/postwar"), jsonString).get().toString();
+            } catch (IOException | ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
             anode.logger.info(String.format("POST WAR, FROM SERVER: {%s}", response));
@@ -56,8 +57,12 @@ public class EventListener {
             return;
         AbstractContainerMenu menu = anode.getPlayer().containerMenu;
         List<ItemStack> items = menu.getItems();
-        JsonObject territories = WebUtils.readJsonFromUrl("http://38.242.159.42:6969/conn.json");
-        JsonObject owners = Objects.requireNonNull(WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList")).getAsJsonObject("territories");
+        try {
+            JsonObject territories = WebUtils.readJsonFromUrl("http://38.242.159.42:6969/conn.json").get().getAsJsonObject();
+            JsonObject owners = WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList").get().getAsJsonObject().getAsJsonObject("territories");
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
         for (ItemStack stack : items) {
             String name = ChatFormatting.stripFormatting(ComponentUtils.getCoded(stack.getDisplayName()));
             assert name != null;
