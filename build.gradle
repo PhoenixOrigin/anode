@@ -12,6 +12,17 @@ subprojects {
 
     loom {
         silentMojangMappingsLicense()
+        runs {
+            client {
+                property("devauth.configDir", getRootProject().file(".devauth").absolutePath)
+                vmArgs "-ea" // run dev builds with asserts
+                client()
+            }
+        }
+    }
+    
+    repositories {
+        maven { url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
     }
 
     dependencies {

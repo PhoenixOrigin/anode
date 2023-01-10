@@ -67,7 +67,6 @@ public abstract class ClientPacketListenerMixin {
     private void handleOpenScreen(ClientboundOpenScreenPacket packet, CallbackInfo ci) {
         try {
             CharacterManager.containerOpen(packet);
-            EventListener.processContainerOpened(packet.getTitle());
         } catch(Exception e){
             anode.logger.log(Level.SEVERE, e.getMessage());
         }

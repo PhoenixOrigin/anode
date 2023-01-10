@@ -8,11 +8,15 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
+import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
+import net.minecraft.world.InteractionHand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +55,10 @@ public class CommandManager {
                 .executes(this::getFeatures)
                 .build();
 
+        LiteralCommandNode<CommandSourceStack> test = Commands.literal("cm")
+                .executes(this::openClassMenu)
+                .build();
+
         return Commands.literal("anode")
                 .then(getClassNode)
                 .then(gcNode)
@@ -58,6 +66,7 @@ public class CommandManager {
                 .then(ucNode)
                 .then(getFeaturesNode)
                 .then(gfNode)
+                .then(test)
                 .executes(this::serverHelp);
     }
 
@@ -155,7 +164,17 @@ public class CommandManager {
 
     private int updatePlayerClass(CommandContext<CommandSourceStack> context) {
         CharacterManager.openClassMenu();
+        CharacterManager.checking = true;
         context.getSource().sendSuccess(Component.literal("Successfully tracker class"), false);
+        return 0;
+    }
+
+    private int openClassMenu(CommandContext<CommandSourceStack> context) {
+        ClientPacketListener connection = anode.getConnection();
+        int prevItem = anode.getPlayer().getInventory().selected;
+        connection.send(new ServerboundSetCarriedItemPacket(6));
+        connection.send(new ServerboundUseItemPacket(InteractionHand.MAIN_HAND, 1));
+        connection.send(new ServerboundSetCarriedItemPacket(prevItem));
         return 0;
     }
 

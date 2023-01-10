@@ -57,12 +57,12 @@ public class EventListener {
             return;
         AbstractContainerMenu menu = anode.getPlayer().containerMenu;
         List<ItemStack> items = menu.getItems();
-        try {
-            JsonObject territories = WebUtils.readJsonFromUrl("http://38.242.159.42:6969/conn.json").get().getAsJsonObject();
-            JsonObject owners = WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList").get().getAsJsonObject().getAsJsonObject("territories");
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        WebUtils.readJsonFromUrl("http://38.242.159.42:6969/conn.json").thenAccept((el) -> {
+            WebUtils.readJsonFromUrl("https://api.wynncraft.com/public_api.php?action=territoryList").thenAcceptAsync((json) -> {
+
+            });
+
+        });
         for (ItemStack stack : items) {
             String name = ChatFormatting.stripFormatting(ComponentUtils.getCoded(stack.getDisplayName()));
             assert name != null;

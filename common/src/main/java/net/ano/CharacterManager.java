@@ -21,6 +21,7 @@ public class CharacterManager {
     private static final Pattern INFO_MENU_CLASS_PATTERN
             = Pattern.compile("§7Class: §r§f(.+)");
     private static boolean compassMenu = false;
+    public static boolean checking = false;
 
     public static void openClassMenu() {
         try {
@@ -36,14 +37,13 @@ public class CharacterManager {
 
     public static void containerItemsSet(ClientboundContainerSetContentPacket packet) {
         try {
-            if (!compassMenu) return;
+            if (!compassMenu & checking) return;
             ItemStack stack = packet.getItems().get(7);
             anode.getPlayer().closeContainer();
             compassMenu = false;
             List<String> lore = ItemUtils.getLore(stack);
             for (String line : lore) {
                 Matcher classMatcher = INFO_MENU_CLASS_PATTERN.matcher(line);
-
                 if (classMatcher.matches()) {
                     anode.classname = classMatcher.group(1);
                     return;
@@ -55,6 +55,7 @@ public class CharacterManager {
     }
 
     public static void containerOpen(ClientboundOpenScreenPacket packet) {
+        if(!checking) return;
         if (Objects.equals(ChatFormatting.stripFormatting(packet.getTitle().getString()), "Character Info")) compassMenu = true;
     }
 
